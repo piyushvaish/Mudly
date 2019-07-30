@@ -3,6 +3,7 @@ const http = require('http');
 const app = express();
 app.use(express.json());
 
+app.use(express.urlencoded({extended:true}));
 const genres = [
     {id:1,name:'House'},
     {id:2,name:'Techno'},
@@ -15,6 +16,14 @@ const genres = [
     {id:9,name:'Bollywood'},
     {id:10,name:'Acoustic'},
 ];
+
+let logger = function(req,res,next){
+    console.log('Logged');
+    next();
+}
+
+app.use(logger) // Introducing a middleware. Each time a request is sent to the server, logger comes in between the request response cycle.
+// Request -> Logger -> Response
 
 app.get('/genres',(req,res)=>{
     res.send(genres);
