@@ -1,9 +1,24 @@
+const config = require('config');
+const morgan = require('morgan');
 const express = require('express');
 const http = require('http');
-const app = express();
-app.use(express.json());
+const app = express(); // app is a top level function in express.
+
+app.use(express.json()); // Takes incoming request and parses into JSON Objects.
 
 app.use(express.urlencoded({extended:true}));
+
+if (app.get('env') === 'development'){
+    app.use(morgan('tiny'));
+}
+
+console.log(`AppName:${config.get('name')}`);
+console.log(`Mail:${config.get('mail.host')}`);
+
+// Configuring the Environments - To set the envir - export NODE_ENV=production in Terminal
+console.log(`NODE_ENV:${process.env.NODE_ENV}`);
+console.log(`NODE_ENV:${app.get('env')}`);
+
 const genres = [
     {id:1,name:'House'},
     {id:2,name:'Techno'},
@@ -22,12 +37,28 @@ let logger = function(req,res,next){
     next();
 }
 
-app.use(logger) // Introducing a middleware. Each time a request is sent to the server, logger comes in between the request response cycle.
-// Request -> Logger -> Response
+//app.use(logger) // Introducing a middleware. Each time a request is sent to the server, logger comes in between the request response cycle.
+// Request -> Logger -> Recsponse
 
 app.get('/genres',(req,res)=>{
     res.send(genres);
 });
+
+// Now we' ll make use of a middleware function to add something to the response object
+// Declaring a middleware function
+
+// let dummyMiddlewareFunction = function(req,res,next){
+//     req.requestTime = Date.now();
+//     next();
+// }
+
+//app.use(dummyMiddlewareFunction);
+
+// Now we'll use this middleware function to append to the server response
+// app.get('/genres',(req,res)=>{
+//     res.send(`The time is ${req.dummyMiddlewareFunction} and genres are ${genres}`);
+// });
+
 
 app.get('/genres/:id',(req,res)=>{
     const genre = genres.find(c => c.id === parseInt(req.params.id));

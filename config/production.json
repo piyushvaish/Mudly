@@ -1,0 +1,6 @@
+{
+    "name":"Mudly-Development",
+    "mail":{
+        "host":"prod-mail-server"
+    }
+}
