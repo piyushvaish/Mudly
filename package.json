@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "config": "^3.2.2",
+    "config": "^3.3.8",
     "express": "^4.17.1",
     "morgan": "^1.9.1"
   }
